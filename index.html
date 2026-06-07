@@ -6,29 +6,35 @@
   <title>Help Desk Ticket Tracker</title>
 
   <style>
-    @import url("https://fonts.googleapis.com/css2?family=Archivo+Black&family=DM+Sans:wght@400;500;700&family=IBM+Plex+Mono:wght@400;600&display=swap");
+    @import url("https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,600;6..72,700&display=swap");
 
     :root {
-      --bg: #07090f;
-      --panel: rgba(17, 24, 39, 0.76);
-      --panel-solid: #111827;
-      --panel-deep: #0b1020;
-      --text: #f6f2e8;
-      --muted: #969fba;
-      --line: rgba(255, 255, 255, 0.11);
+      --bg: #080b12;
+      --surface: rgba(255, 255, 255, 0.08);
+      --surface-strong: rgba(255, 255, 255, 0.13);
+      --surface-soft: rgba(255, 255, 255, 0.055);
+      --stroke: rgba(255, 255, 255, 0.13);
+      --stroke-strong: rgba(255, 255, 255, 0.22);
+      --text: #f7f8fb;
+      --muted: #a7adbc;
+      --muted-2: #71798d;
 
-      --blue: #4cc9f0;
-      --green: #6ee7b7;
-      --yellow: #fde047;
-      --orange: #fb923c;
-      --red: #fb7185;
-      --violet: #a78bfa;
-      --ink: #020617;
+      --blue: #7dd3fc;
+      --blue-strong: #38bdf8;
+      --green: #86efac;
+      --yellow: #fde68a;
+      --red: #fda4af;
+      --orange: #fdba74;
+      --violet: #c4b5fd;
 
-      --radius-xl: 28px;
-      --radius-lg: 20px;
-      --radius-md: 14px;
-      --shadow: 0 30px 90px rgba(0, 0, 0, 0.45);
+      --radius-xl: 34px;
+      --radius-lg: 26px;
+      --radius-md: 18px;
+      --radius-sm: 13px;
+
+      --shadow-soft: 0 28px 80px rgba(0, 0, 0, 0.38);
+      --shadow-card: 0 18px 45px rgba(0, 0, 0, 0.24);
+      --blur: blur(26px);
     }
 
     * {
@@ -37,15 +43,19 @@
       padding: 0;
     }
 
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       min-height: 100vh;
-      background:
-        radial-gradient(circle at 10% 15%, rgba(76, 201, 240, 0.16), transparent 28%),
-        radial-gradient(circle at 85% 10%, rgba(167, 139, 250, 0.18), transparent 30%),
-        radial-gradient(circle at 70% 85%, rgba(251, 113, 133, 0.12), transparent 28%),
-        linear-gradient(135deg, #050711 0%, #0b1020 45%, #050711 100%);
       color: var(--text);
-      font-family: "DM Sans", sans-serif;
+      font-family: "Instrument Sans", sans-serif;
+      background:
+        radial-gradient(circle at 12% 8%, rgba(125, 211, 252, 0.26), transparent 30%),
+        radial-gradient(circle at 88% 12%, rgba(196, 181, 253, 0.23), transparent 31%),
+        radial-gradient(circle at 65% 92%, rgba(134, 239, 172, 0.12), transparent 33%),
+        linear-gradient(145deg, #06070c 0%, #0d1220 48%, #05070d 100%);
       overflow-x: hidden;
     }
 
@@ -54,12 +64,11 @@
       position: fixed;
       inset: 0;
       pointer-events: none;
-      opacity: 0.28;
-      background-image:
-        linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
-      background-size: 42px 42px;
-      mask-image: radial-gradient(circle at center, black, transparent 75%);
+      opacity: 0.5;
+      background:
+        linear-gradient(120deg, transparent 0%, rgba(255,255,255,0.045) 42%, transparent 48%),
+        radial-gradient(circle at center, rgba(255,255,255,0.035), transparent 60%);
+      mask-image: linear-gradient(to bottom, black, transparent 85%);
     }
 
     body::after {
@@ -67,128 +76,223 @@
       position: fixed;
       inset: 0;
       pointer-events: none;
-      opacity: 0.09;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+      opacity: 0.075;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 220 220' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.65'/%3E%3C/svg%3E");
     }
 
-    .shell {
-      width: min(1220px, calc(100% - 32px));
+    button,
+    input,
+    textarea,
+    select {
+      font: inherit;
+    }
+
+    button,
+    select {
+      cursor: pointer;
+    }
+
+    .app {
+      width: min(1180px, calc(100% - 32px));
       margin: 0 auto;
-      padding: 38px 0 54px;
+      padding: 34px 0 56px;
       position: relative;
       z-index: 1;
+    }
+
+    .topbar {
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 28px;
+      padding: 10px 10px 10px 18px;
+      border: 1px solid var(--stroke);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.07);
+      backdrop-filter: var(--blur);
+      box-shadow: var(--shadow-card);
+      animation: floatIn 0.6s ease both;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .brand-mark {
+      width: 38px;
+      height: 38px;
+      border-radius: 15px;
+      background:
+        radial-gradient(circle at 30% 25%, #ffffff, rgba(255,255,255,0.18) 34%, transparent 35%),
+        linear-gradient(135deg, rgba(125, 211, 252, 0.95), rgba(196, 181, 253, 0.9));
+      box-shadow: 0 12px 30px rgba(125, 211, 252, 0.22);
+      flex: 0 0 auto;
+    }
+
+    .brand-text {
+      display: grid;
+      line-height: 1.05;
+    }
+
+    .brand-text strong {
+      font-size: 0.95rem;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-text span {
+      color: var(--muted);
+      font-size: 0.78rem;
+    }
+
+    .system-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: #dfe7f7;
+      font-size: 0.84rem;
+      white-space: nowrap;
+    }
+
+    .system-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 0 6px rgba(134, 239, 172, 0.13);
     }
 
     .hero {
       display: grid;
-      grid-template-columns: 1.2fr 0.8fr;
-      gap: 24px;
-      align-items: stretch;
-      margin-bottom: 26px;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 22px;
+      margin-bottom: 22px;
     }
 
-    .hero-main {
-      position: relative;
-      padding: 36px;
-      border: 1px solid var(--line);
-      border-radius: var(--radius-xl);
+    .hero-card,
+    .stats-card,
+    .creator,
+    .queue {
+      border: 1px solid var(--stroke);
       background:
-        linear-gradient(135deg, rgba(255,255,255,0.09), rgba(255,255,255,0.025)),
-        rgba(7, 9, 15, 0.78);
-      box-shadow: var(--shadow);
-      overflow: hidden;
-      backdrop-filter: blur(20px);
+        linear-gradient(145deg, rgba(255,255,255,0.115), rgba(255,255,255,0.045)),
+        rgba(10, 14, 24, 0.68);
+      backdrop-filter: var(--blur);
+      box-shadow: var(--shadow-soft);
     }
 
-    .hero-main::before {
+    .hero-card {
+      position: relative;
+      min-height: 330px;
+      border-radius: var(--radius-xl);
+      padding: 38px;
+      overflow: hidden;
+      animation: floatIn 0.72s 0.05s ease both;
+    }
+
+    .hero-card::before {
       content: "";
       position: absolute;
-      width: 260px;
-      height: 260px;
-      right: -90px;
-      top: -100px;
-      background: conic-gradient(from 120deg, var(--blue), var(--violet), var(--red), var(--blue));
+      width: 420px;
+      height: 420px;
+      right: -160px;
+      top: -170px;
       border-radius: 50%;
-      opacity: 0.28;
-      filter: blur(10px);
+      background:
+        radial-gradient(circle at 34% 32%, rgba(255,255,255,0.95), transparent 8%),
+        conic-gradient(from 210deg, rgba(125, 211, 252, 0.65), rgba(196, 181, 253, 0.44), rgba(134, 239, 172, 0.32), rgba(125, 211, 252, 0.65));
+      opacity: 0.62;
+      filter: blur(2px);
+    }
+
+    .hero-card::after {
+      content: "";
+      position: absolute;
+      right: 34px;
+      bottom: 30px;
+      width: 150px;
+      height: 150px;
+      border-radius: 48px;
+      border: 1px solid rgba(255,255,255,0.16);
+      background: rgba(255,255,255,0.05);
+      transform: rotate(8deg);
     }
 
     .eyebrow {
+      position: relative;
+      z-index: 1;
       display: inline-flex;
       align-items: center;
-      gap: 10px;
-      margin-bottom: 18px;
-      color: var(--blue);
-      font-family: "IBM Plex Mono", monospace;
+      gap: 9px;
+      margin-bottom: 22px;
+      padding: 9px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: #dcecff;
       font-size: 0.78rem;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
+      font-weight: 600;
     }
 
-    .pulse {
-      width: 10px;
-      height: 10px;
-      background: var(--green);
+    .eyebrow::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      background: var(--blue);
       border-radius: 50%;
-      box-shadow: 0 0 0 0 rgba(110, 231, 183, 0.75);
-      animation: pulse 1.8s infinite;
-    }
-
-    @keyframes pulse {
-      70% {
-        box-shadow: 0 0 0 12px rgba(110, 231, 183, 0);
-      }
-      100% {
-        box-shadow: 0 0 0 0 rgba(110, 231, 183, 0);
-      }
+      box-shadow: 0 0 0 7px rgba(125, 211, 252, 0.12);
     }
 
     h1 {
-      max-width: 780px;
-      font-family: "Archivo Black", sans-serif;
-      font-size: clamp(2.45rem, 6vw, 5.6rem);
-      line-height: 0.9;
-      letter-spacing: -0.08em;
-      text-transform: uppercase;
       position: relative;
       z-index: 1;
+      max-width: 760px;
+      font-family: "Newsreader", serif;
+      font-size: clamp(3rem, 7vw, 6.8rem);
+      line-height: 0.86;
+      letter-spacing: -0.075em;
+      font-weight: 700;
     }
 
     .hero-copy {
-      max-width: 620px;
-      margin-top: 18px;
-      color: var(--muted);
-      font-size: 1.04rem;
-      line-height: 1.7;
       position: relative;
       z-index: 1;
+      max-width: 610px;
+      margin-top: 20px;
+      color: var(--muted);
+      font-size: 1.05rem;
+      line-height: 1.75;
     }
 
-    .hero-side {
-      border: 1px solid var(--line);
+    .stats-card {
       border-radius: var(--radius-xl);
-      background:
-        linear-gradient(180deg, rgba(76, 201, 240, 0.13), rgba(255,255,255,0.03)),
-        rgba(17, 24, 39, 0.7);
-      backdrop-filter: blur(20px);
-      box-shadow: var(--shadow);
-      padding: 24px;
+      padding: 22px;
       display: grid;
       gap: 14px;
+      animation: floatIn 0.72s 0.12s ease both;
     }
 
-    .stat-grid {
+    .stat-row {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 14px;
     }
 
     .stat {
-      min-height: 112px;
-      border: 1px solid var(--line);
-      border-radius: 22px;
-      padding: 18px;
-      background: rgba(2, 6, 23, 0.58);
+      min-height: 140px;
+      padding: 20px;
+      border-radius: 28px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.09), rgba(255,255,255,0.035));
+      border: 1px solid rgba(255,255,255,0.11);
       position: relative;
       overflow: hidden;
     }
@@ -196,197 +300,233 @@
     .stat::after {
       content: "";
       position: absolute;
-      inset: auto -20px -35px auto;
-      width: 90px;
-      height: 90px;
+      width: 100px;
+      height: 100px;
+      right: -42px;
+      bottom: -42px;
       border-radius: 50%;
-      background: rgba(255,255,255,0.07);
+      background: rgba(255,255,255,0.08);
     }
 
     .stat span {
-      display: block;
       color: var(--muted);
-      font-size: 0.76rem;
-      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.78rem;
+      font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.1em;
-      margin-bottom: 12px;
+      letter-spacing: 0.09em;
     }
 
     .stat strong {
-      font-family: "Archivo Black", sans-serif;
-      font-size: 2.2rem;
-      letter-spacing: -0.05em;
+      display: block;
+      margin-top: 18px;
+      font-family: "Newsreader", serif;
+      font-size: 3.2rem;
+      line-height: 0.8;
+      letter-spacing: -0.08em;
     }
 
     .workspace {
       display: grid;
-      grid-template-columns: 390px 1fr;
-      gap: 24px;
+      grid-template-columns: 380px 1fr;
+      gap: 22px;
       align-items: start;
     }
 
-    .panel {
-      border: 1px solid var(--line);
+    .creator,
+    .queue {
       border-radius: var(--radius-xl);
-      background: var(--panel);
-      backdrop-filter: blur(20px);
-      box-shadow: var(--shadow);
       overflow: hidden;
     }
 
-    .panel-head {
-      padding: 22px 24px;
-      border-bottom: 1px solid var(--line);
-      background: rgba(255,255,255,0.035);
+    .creator {
+      animation: floatIn 0.72s 0.18s ease both;
     }
 
-    .panel-head h2 {
-      font-family: "Archivo Black", sans-serif;
+    .queue {
+      animation: floatIn 0.72s 0.24s ease both;
+    }
+
+    @keyframes floatIn {
+      from {
+        opacity: 0;
+        transform: translateY(16px) scale(0.985);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .panel-header {
+      padding: 24px 24px 18px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .panel-header h2 {
+      font-size: 1.4rem;
       letter-spacing: -0.04em;
-      font-size: 1.45rem;
-      text-transform: uppercase;
     }
 
-    .panel-head p {
+    .panel-header p {
       color: var(--muted);
-      margin-top: 6px;
-      line-height: 1.5;
+      margin-top: 7px;
       font-size: 0.94rem;
+      line-height: 1.55;
     }
 
     form {
-      padding: 24px;
+      padding: 22px;
     }
 
     .field {
-      margin-bottom: 18px;
+      margin-bottom: 16px;
     }
 
     label {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      display: block;
       margin-bottom: 8px;
-      color: #dbe6ff;
-      font-size: 0.78rem;
-      font-family: "IBM Plex Mono", monospace;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
+      color: #dfe4ef;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
     }
 
     input,
     textarea,
     select {
       width: 100%;
-      border: 1px solid rgba(255,255,255,0.13);
-      border-radius: var(--radius-md);
-      background: rgba(2, 6, 23, 0.74);
+      border: 1px solid rgba(255,255,255,0.12);
       color: var(--text);
-      padding: 13px 14px;
-      font: inherit;
+      background: rgba(255,255,255,0.075);
+      border-radius: 18px;
       outline: none;
-      transition: border 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+      padding: 14px 15px;
+      transition: border-color 0.18s ease, background 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
     }
 
     textarea {
-      min-height: 130px;
+      min-height: 118px;
       resize: vertical;
       line-height: 1.55;
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+      color: rgba(210, 218, 235, 0.42);
     }
 
     input:focus,
     textarea:focus,
     select:focus {
-      border-color: rgba(76, 201, 240, 0.85);
-      box-shadow: 0 0 0 4px rgba(76, 201, 240, 0.12);
+      border-color: rgba(125, 211, 252, 0.62);
+      background: rgba(255,255,255,0.105);
+      box-shadow: 0 0 0 5px rgba(125, 211, 252, 0.11);
       transform: translateY(-1px);
     }
 
-    .row {
+    select {
+      appearance: none;
+      background-image:
+        linear-gradient(45deg, transparent 50%, rgba(255,255,255,0.75) 50%),
+        linear-gradient(135deg, rgba(255,255,255,0.75) 50%, transparent 50%);
+      background-position:
+        calc(100% - 18px) 52%,
+        calc(100% - 12px) 52%;
+      background-size: 6px 6px, 6px 6px;
+      background-repeat: no-repeat;
+    }
+
+    option {
+      background: #111827;
+      color: #f8fafc;
+    }
+
+    .form-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 14px;
     }
 
-    .submit-btn {
+    .primary-btn {
       width: 100%;
-      border: 0;
-      border-radius: 18px;
+      margin-top: 4px;
+      border: none;
+      border-radius: 20px;
       padding: 15px 18px;
-      color: #061018;
-      background:
-        linear-gradient(135deg, var(--green), var(--blue) 52%, #b8f7ff);
-      font-family: "Archivo Black", sans-serif;
-      text-transform: uppercase;
+      color: #06111c;
+      font-weight: 800;
       letter-spacing: -0.02em;
-      cursor: pointer;
-      box-shadow: 0 18px 40px rgba(76, 201, 240, 0.22);
+      background:
+        linear-gradient(135deg, #f8fafc 0%, #bfdbfe 42%, #7dd3fc 100%);
+      box-shadow:
+        0 16px 38px rgba(125, 211, 252, 0.22),
+        inset 0 1px 0 rgba(255,255,255,0.75);
       transition: transform 0.18s ease, filter 0.18s ease;
     }
 
-    .submit-btn:hover {
-      transform: translateY(-3px) scale(1.01);
-      filter: brightness(1.08);
+    .primary-btn:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.06);
     }
 
     .toolbar {
       display: flex;
       flex-wrap: wrap;
-      gap: 10px;
-      padding: 18px 24px;
-      border-bottom: 1px solid var(--line);
-      background: rgba(2, 6, 23, 0.32);
+      gap: 9px;
+      padding: 18px 22px;
+      border-bottom: 1px solid rgba(255,255,255,0.09);
     }
 
     .filter-btn {
-      border: 1px solid rgba(255,255,255,0.12);
-      background: rgba(255,255,255,0.045);
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.055);
       color: var(--muted);
-      padding: 9px 12px;
+      padding: 10px 13px;
       border-radius: 999px;
-      cursor: pointer;
-      font-family: "IBM Plex Mono", monospace;
-      font-size: 0.76rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
+      font-weight: 700;
+      font-size: 0.82rem;
       transition: all 0.18s ease;
     }
 
     .filter-btn:hover,
     .filter-btn.active {
       color: var(--text);
-      border-color: rgba(76, 201, 240, 0.7);
-      background: rgba(76, 201, 240, 0.13);
+      border-color: rgba(125, 211, 252, 0.42);
+      background: rgba(125, 211, 252, 0.13);
     }
 
     .ticket-list {
       padding: 22px;
       display: grid;
-      gap: 16px;
-      min-height: 360px;
+      gap: 14px;
+      min-height: 390px;
     }
 
     .ticket {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 18px;
+      align-items: center;
       position: relative;
-      border: 1px solid rgba(255,255,255,0.11);
-      border-radius: 24px;
-      padding: 18px;
+      padding: 20px;
+      border-radius: 28px;
+      border: 1px solid rgba(255,255,255,0.105);
       background:
-        linear-gradient(135deg, rgba(255,255,255,0.075), rgba(255,255,255,0.025)),
-        rgba(2, 6, 23, 0.72);
-      cursor: pointer;
+        linear-gradient(145deg, rgba(255,255,255,0.105), rgba(255,255,255,0.035)),
+        rgba(255,255,255,0.035);
+      box-shadow: var(--shadow-card);
       overflow: hidden;
-      transform-origin: center;
-      animation: ticketIn 0.36s ease both;
+      animation: ticketIn 0.34s ease both;
       transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
     }
 
     @keyframes ticketIn {
       from {
         opacity: 0;
-        transform: translateY(12px) scale(0.98);
+        transform: translateY(10px) scale(0.99);
       }
+
       to {
         opacity: 1;
         transform: translateY(0) scale(1);
@@ -394,18 +534,21 @@
     }
 
     .ticket:hover {
-      transform: translateY(-4px);
-      border-color: rgba(76, 201, 240, 0.55);
+      transform: translateY(-3px);
+      border-color: rgba(255,255,255,0.22);
       background:
-        linear-gradient(135deg, rgba(76, 201, 240, 0.12), rgba(255,255,255,0.025)),
-        rgba(2, 6, 23, 0.88);
+        linear-gradient(145deg, rgba(255,255,255,0.14), rgba(255,255,255,0.055)),
+        rgba(255,255,255,0.055);
     }
 
     .ticket::before {
       content: "";
       position: absolute;
-      inset: 0 auto 0 0;
-      width: 6px;
+      left: 16px;
+      top: 18px;
+      bottom: 18px;
+      width: 5px;
+      border-radius: 999px;
       background: var(--blue);
     }
 
@@ -423,34 +566,40 @@
 
     .ticket.priority-critical::before {
       background: var(--red);
-      box-shadow: 0 0 24px rgba(251, 113, 133, 0.65);
+      box-shadow: 0 0 18px rgba(253, 164, 175, 0.55);
     }
 
-    .ticket-top {
+    .ticket-content {
+      padding-left: 14px;
+      min-width: 0;
+    }
+
+    .ticket-title-row {
       display: flex;
-      justify-content: space-between;
-      gap: 16px;
-      margin-bottom: 14px;
-    }
-
-    .ticket-title {
-      font-size: 1.14rem;
-      line-height: 1.25;
-      font-weight: 700;
-      color: #fffaf0;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
       margin-bottom: 6px;
     }
 
+    .ticket-title {
+      font-size: 1.08rem;
+      letter-spacing: -0.03em;
+      font-weight: 800;
+      color: #ffffff;
+    }
+
     .ticket-id {
-      color: var(--muted);
-      font-family: "IBM Plex Mono", monospace;
-      font-size: 0.74rem;
+      color: var(--muted-2);
+      font-size: 0.78rem;
+      font-weight: 700;
     }
 
     .ticket-description {
-      color: #b8c0d9;
-      line-height: 1.6;
-      margin-bottom: 16px;
+      color: var(--muted);
+      line-height: 1.56;
+      margin: 8px 0 14px;
+      max-width: 760px;
       word-break: break-word;
     }
 
@@ -465,15 +614,13 @@
       display: inline-flex;
       align-items: center;
       gap: 7px;
-      border-radius: 999px;
       padding: 7px 10px;
-      font-size: 0.72rem;
-      font-family: "IBM Plex Mono", monospace;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      border: 1px solid rgba(255,255,255,0.12);
-      white-space: nowrap;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 800;
+      border: 1px solid rgba(255,255,255,0.105);
+      background: rgba(255,255,255,0.055);
+      color: #dce4f3;
     }
 
     .badge::before {
@@ -484,49 +631,63 @@
       background: currentColor;
     }
 
-    .status-open {
-      color: var(--blue);
-      background: rgba(76, 201, 240, 0.12);
-    }
-
-    .status-progress {
-      color: var(--yellow);
-      background: rgba(253, 224, 71, 0.12);
-    }
-
-    .status-resolved {
+    .priority-low {
       color: var(--green);
-      background: rgba(110, 231, 183, 0.12);
     }
 
-    .priority-badge.low {
-      color: var(--green);
-      background: rgba(110, 231, 183, 0.1);
-    }
-
-    .priority-badge.medium {
+    .priority-medium {
       color: var(--blue);
-      background: rgba(76, 201, 240, 0.1);
     }
 
-    .priority-badge.high {
+    .priority-high {
       color: var(--orange);
-      background: rgba(251, 146, 60, 0.1);
     }
 
-    .priority-badge.critical {
+    .priority-critical {
       color: var(--red);
-      background: rgba(251, 113, 133, 0.1);
     }
 
-    .category-badge {
-      color: #c7d2fe;
-      background: rgba(167, 139, 250, 0.11);
+    .category {
+      color: var(--violet);
     }
 
-    .time {
-      color: var(--muted);
-      margin-left: auto;
+    .status-control {
+      display: grid;
+      justify-items: end;
+      gap: 8px;
+    }
+
+    .status-label {
+      color: var(--muted-2);
+      font-size: 0.74rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .status-select {
+      min-width: 155px;
+      border-radius: 999px;
+      padding: 11px 34px 11px 13px;
+      font-size: 0.86rem;
+      font-weight: 800;
+      border: 1px solid rgba(255,255,255,0.14);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
+    }
+
+    .status-select.open {
+      color: var(--blue);
+      background-color: rgba(125, 211, 252, 0.1);
+    }
+
+    .status-select.progress {
+      color: var(--yellow);
+      background-color: rgba(253, 230, 138, 0.1);
+    }
+
+    .status-select.resolved {
+      color: var(--green);
+      background-color: rgba(134, 239, 172, 0.1);
     }
 
     .empty-state {
@@ -534,49 +695,61 @@
       display: grid;
       place-items: center;
       text-align: center;
+      border-radius: 30px;
       border: 1px dashed rgba(255,255,255,0.16);
-      border-radius: 24px;
-      padding: 30px;
-      background: rgba(255,255,255,0.025);
+      background:
+        radial-gradient(circle at 50% 0%, rgba(125, 211, 252, 0.09), transparent 38%),
+        rgba(255,255,255,0.035);
+      padding: 34px;
+    }
+
+    .empty-orb {
+      width: 74px;
+      height: 74px;
+      margin: 0 auto 18px;
+      border-radius: 26px;
+      background:
+        radial-gradient(circle at 32% 25%, rgba(255,255,255,0.95), transparent 12%),
+        linear-gradient(135deg, rgba(125, 211, 252, 0.82), rgba(196, 181, 253, 0.74));
+      box-shadow: 0 18px 40px rgba(125, 211, 252, 0.16);
     }
 
     .empty-state strong {
       display: block;
-      font-family: "Archivo Black", sans-serif;
-      text-transform: uppercase;
-      letter-spacing: -0.04em;
-      font-size: 1.65rem;
-      margin-bottom: 10px;
+      font-family: "Newsreader", serif;
+      font-size: 2rem;
+      letter-spacing: -0.055em;
+      margin-bottom: 8px;
     }
 
     .empty-state p {
+      max-width: 410px;
       color: var(--muted);
       line-height: 1.6;
-      max-width: 420px;
     }
 
     .toast {
       position: fixed;
       right: 22px;
       bottom: 22px;
-      z-index: 20;
-      background: rgba(2, 6, 23, 0.92);
-      border: 1px solid rgba(76, 201, 240, 0.32);
-      color: var(--text);
+      z-index: 5;
+      padding: 13px 15px;
       border-radius: 18px;
-      padding: 14px 16px;
-      box-shadow: var(--shadow);
-      font-family: "IBM Plex Mono", monospace;
-      font-size: 0.82rem;
-      transform: translateY(20px);
+      color: var(--text);
+      background: rgba(18, 25, 40, 0.84);
+      border: 1px solid rgba(255,255,255,0.15);
+      backdrop-filter: var(--blur);
+      box-shadow: var(--shadow-card);
+      font-weight: 700;
       opacity: 0;
+      transform: translateY(14px) scale(0.98);
       pointer-events: none;
-      transition: all 0.24s ease;
+      transition: opacity 0.22s ease, transform 0.22s ease;
     }
 
     .toast.show {
-      transform: translateY(0);
       opacity: 1;
+      transform: translateY(0) scale(1);
     }
 
     @media (max-width: 980px) {
@@ -585,60 +758,92 @@
         grid-template-columns: 1fr;
       }
 
-      .hero-main {
-        padding: 28px;
+      .hero-card {
+        min-height: auto;
       }
     }
 
-    @media (max-width: 620px) {
-      .shell {
-        width: min(100% - 22px, 1220px);
-        padding-top: 18px;
+    @media (max-width: 700px) {
+      .app {
+        width: min(100% - 22px, 1180px);
+        padding-top: 16px;
       }
 
-      .row,
-      .stat-grid {
+      .topbar {
+        border-radius: 24px;
+        height: auto;
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 14px;
+      }
+
+      .system-pill {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .hero-card,
+      .stats-card,
+      .creator,
+      .queue {
+        border-radius: 26px;
+      }
+
+      .hero-card {
+        padding: 28px;
+      }
+
+      .stat-row,
+      .form-grid {
         grid-template-columns: 1fr;
       }
 
-      .hero-main,
-      .hero-side,
-      .panel {
-        border-radius: 22px;
+      .ticket {
+        grid-template-columns: 1fr;
       }
 
-      .ticket-top {
-        flex-direction: column;
+      .status-control {
+        justify-items: stretch;
       }
 
-      .time {
-        margin-left: 0;
+      .status-select {
+        width: 100%;
       }
     }
   </style>
 </head>
 
 <body>
-  <div class="shell">
-    <section class="hero">
-      <div class="hero-main">
-        <div class="eyebrow">
-          <span class="pulse"></span>
-          Support Queue Live
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true"></div>
+        <div class="brand-text">
+          <strong>HelpDesk Flow</strong>
+          <span>Ticket operations dashboard</span>
         </div>
+      </div>
 
-        <h1>Help Desk Ticket Tracker</h1>
+      <div class="system-pill">
+        <span class="system-dot"></span>
+        Local queue active
+      </div>
+    </header>
 
+    <section class="hero">
+      <div class="hero-card">
+        <div class="eyebrow">Modern support workspace</div>
+        <h1>Ticket clarity, without the clutter.</h1>
         <p class="hero-copy">
-          A dark-mode operations board for logging user issues, triaging priority,
-          and moving tickets through Open, In Progress, and Resolved states.
+          Create help desk tickets, organize them by priority and category, then directly assign
+          each ticket to Open, In Progress, or Resolved from a clean status menu.
         </p>
       </div>
 
-      <aside class="hero-side">
-        <div class="stat-grid">
+      <aside class="stats-card">
+        <div class="stat-row">
           <div class="stat">
-            <span>Total</span>
+            <span>Total tickets</span>
             <strong id="totalCount">0</strong>
           </div>
 
@@ -646,9 +851,11 @@
             <span>Open</span>
             <strong id="openCount">0</strong>
           </div>
+        </div>
 
+        <div class="stat-row">
           <div class="stat">
-            <span>Working</span>
+            <span>In progress</span>
             <strong id="progressCount">0</strong>
           </div>
 
@@ -661,10 +868,10 @@
     </section>
 
     <main class="workspace">
-      <section class="panel">
-        <div class="panel-head">
-          <h2>Create Ticket</h2>
-          <p>Capture the issue, assign priority, and send it into the queue.</p>
+      <section class="creator">
+        <div class="panel-header">
+          <h2>Create a ticket</h2>
+          <p>Add the issue details and send it into your support queue.</p>
         </div>
 
         <form id="ticketForm">
@@ -673,7 +880,7 @@
             <input
               id="title"
               type="text"
-              placeholder="Example: VPN fails after password reset"
+              placeholder="Example: MacBook cannot connect to Wi-Fi"
               required
             />
           </div>
@@ -682,12 +889,12 @@
             <label for="description">Description</label>
             <textarea
               id="description"
-              placeholder="Add symptoms, affected user, error messages, or steps already tried..."
+              placeholder="Describe the issue, who is affected, error messages, and steps already tried..."
               required
             ></textarea>
           </div>
 
-          <div class="row">
+          <div class="form-grid">
             <div class="field">
               <label for="priority">Priority</label>
               <select id="priority" required>
@@ -710,14 +917,14 @@
             </div>
           </div>
 
-          <button class="submit-btn" type="submit">Add Ticket</button>
+          <button class="primary-btn" type="submit">Add Ticket</button>
         </form>
       </section>
 
-      <section class="panel">
-        <div class="panel-head">
-          <h2>Ticket Queue</h2>
-          <p>Click any ticket to cycle status: Open → In Progress → Resolved.</p>
+      <section class="queue">
+        <div class="panel-header">
+          <h2>Ticket queue</h2>
+          <p>Use the status menu on each ticket to choose the exact stage.</p>
         </div>
 
         <div class="toolbar">
@@ -732,7 +939,7 @@
     </main>
   </div>
 
-  <div id="toast" class="toast">Ticket updated</div>
+  <div id="toast" class="toast">Updated</div>
 
   <script>
     const ticketForm = document.getElementById("ticketForm");
@@ -745,8 +952,9 @@
     const progressCount = document.getElementById("progressCount");
     const resolvedCount = document.getElementById("resolvedCount");
 
-    let tickets = JSON.parse(localStorage.getItem("helpDeskTickets")) || [];
+    let tickets = JSON.parse(localStorage.getItem("helpDeskTicketsModern")) || [];
     let activeFilter = "All";
+    let toastTimer;
 
     ticketForm.addEventListener("submit", function (event) {
       event.preventDefault();
@@ -770,11 +978,12 @@
 
       tickets.unshift(ticket);
       saveTickets();
+
       ticketForm.reset();
       document.getElementById("priority").value = "medium";
 
-      showToast("Ticket added to queue");
       render();
+      showToast("Ticket added");
     });
 
     filterButtons.forEach(function (button) {
@@ -790,12 +999,11 @@
     });
 
     function createTicketId() {
-      const random = Math.floor(1000 + Math.random() * 9000);
-      return "HD-" + random;
+      return "HD-" + Math.floor(1000 + Math.random() * 9000);
     }
 
     function saveTickets() {
-      localStorage.setItem("helpDeskTickets", JSON.stringify(tickets));
+      localStorage.setItem("helpDeskTicketsModern", JSON.stringify(tickets));
     }
 
     function render() {
@@ -821,8 +1029,9 @@
         ticketList.innerHTML = `
           <div class="empty-state">
             <div>
-              <strong>No tickets found</strong>
-              <p>The queue is clear for this view. Create a ticket or switch filters to inspect another status lane.</p>
+              <div class="empty-orb"></div>
+              <strong>No tickets here</strong>
+              <p>Create a new ticket or switch filters to view another part of the queue.</p>
             </div>
           </div>
         `;
@@ -834,71 +1043,69 @@
         ticketElement.className = `ticket priority-${ticket.priority}`;
         ticketElement.style.animationDelay = `${index * 45}ms`;
 
-        ticketElement.addEventListener("click", function () {
-          cycleTicketStatus(ticket.id);
-        });
-
         ticketElement.innerHTML = `
-          <div class="ticket-top">
-            <div>
+          <div class="ticket-content">
+            <div class="ticket-title-row">
               <h3 class="ticket-title">${escapeHTML(ticket.title)}</h3>
-              <div class="ticket-id">${ticket.id} · ${formatDate(ticket.createdAt)}</div>
+              <span class="ticket-id">${ticket.id} · ${formatDate(ticket.createdAt)}</span>
             </div>
 
-            <span class="badge ${getStatusClass(ticket.status)}">
-              ${ticket.status}
-            </span>
+            <p class="ticket-description">${escapeHTML(ticket.description)}</p>
+
+            <div class="ticket-meta">
+              <span class="badge priority-${ticket.priority}">
+                ${capitalize(ticket.priority)}
+              </span>
+
+              <span class="badge category">
+                ${escapeHTML(ticket.category)}
+              </span>
+            </div>
           </div>
 
-          <p class="ticket-description">${escapeHTML(ticket.description)}</p>
-
-          <div class="ticket-meta">
-            <span class="badge priority-badge ${ticket.priority}">
-              ${capitalize(ticket.priority)}
-            </span>
-
-            <span class="badge category-badge">
-              ${escapeHTML(ticket.category)}
-            </span>
-
-            <span class="badge time">
-              Click to update
-            </span>
+          <div class="status-control">
+            <span class="status-label">Status</span>
+            <select
+              class="status-select ${getStatusClass(ticket.status)}"
+              data-ticket-id="${ticket.id}"
+              aria-label="Change status for ${escapeHTML(ticket.title)}"
+            >
+              <option value="Open" ${ticket.status === "Open" ? "selected" : ""}>Open</option>
+              <option value="In Progress" ${ticket.status === "In Progress" ? "selected" : ""}>In Progress</option>
+              <option value="Resolved" ${ticket.status === "Resolved" ? "selected" : ""}>Resolved</option>
+            </select>
           </div>
         `;
 
         ticketList.appendChild(ticketElement);
       });
+
+      document.querySelectorAll(".status-select").forEach(function (select) {
+        select.addEventListener("change", function () {
+          updateTicketStatus(select.dataset.ticketId, select.value);
+        });
+      });
     }
 
-    function cycleTicketStatus(ticketId) {
+    function updateTicketStatus(ticketId, newStatus) {
       tickets = tickets.map(function (ticket) {
         if (ticket.id !== ticketId) return ticket;
 
         return {
           ...ticket,
-          status: getNextStatus(ticket.status)
+          status: newStatus
         };
       });
 
       saveTickets();
       render();
-
-      const updatedTicket = tickets.find(ticket => ticket.id === ticketId);
-      showToast(`${updatedTicket.id} moved to ${updatedTicket.status}`);
-    }
-
-    function getNextStatus(status) {
-      const statuses = ["Open", "In Progress", "Resolved"];
-      const currentIndex = statuses.indexOf(status);
-      const nextIndex = (currentIndex + 1) % statuses.length;
-      return statuses[nextIndex];
+      showToast(`Status changed to ${newStatus}`);
     }
 
     function getStatusClass(status) {
-      if (status === "Open") return "status-open";
-      if (status === "In Progress") return "status-progress";
-      return "status-resolved";
+      if (status === "Open") return "open";
+      if (status === "In Progress") return "progress";
+      return "resolved";
     }
 
     function formatDate(dateString) {
@@ -920,8 +1127,6 @@
       return div.innerHTML;
     }
 
-    let toastTimer;
-
     function showToast(message) {
       toast.textContent = message;
       toast.classList.add("show");
@@ -930,7 +1135,7 @@
 
       toastTimer = setTimeout(function () {
         toast.classList.remove("show");
-      }, 1800);
+      }, 1700);
     }
 
     render();
